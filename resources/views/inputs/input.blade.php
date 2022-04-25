@@ -1,0 +1,17 @@
+<input
+    v-if="['textinput', 'date', 'time', 'number'].includes(input.type)"
+    v-bind:type="{'validate-email': 'email', 'validate-number': 'number', 'validate-digits': 'number', 'validate-url': 'url'}[input.validation] || input.type.replace('input', '')"
+    class="w-full py-2 px-3 border-gray-300 rounded focus:ring-green-500 focus:border-green-500 sm:text-sm"
+    v-bind:id="input.name"
+    v-bind:name="input.name"
+    v-bind:required="input.required"
+    v-bind:placeholder="input.placeholder || null"
+    v-bind:style="input.style"
+    v-bind:min="input.min"
+    v-bind:max="input.max"
+    v-bind:step="input.step"
+    v-bind:maxlength="input.maxlength || null"
+    v-bind:pattern="{'validate-alpha': '[A-Za-z]*', 'validate-alphanum': '[A-Za-z0-9]*'}[input.validation] || (input.validation === 'pattern' && input.regexp) || null"
+    v-bind:title="input.errorMessage || null"
+    v-model="variables.form_data[input.name]"
+>

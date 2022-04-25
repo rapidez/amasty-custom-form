@@ -1,0 +1,24 @@
+query ($formId: Int) {
+    customform(formId: $formId) {
+        form_id
+        title
+        code
+        success_url
+        status
+        created_at
+        customer_group
+        submit_button
+        success_message
+        form_json
+        email_field
+        email_field_hide
+        popup_show
+        popup_button
+        form_title
+        save_referer_url
+        gdpr_enabled
+        gdpr_text
+        is_form_available
+        isSurvey
+    }
+}
