@@ -15,7 +15,6 @@ query ($formId: Int) {
         popup_show
         popup_button
         form_title
-        save_referer_url
         gdpr_enabled
         gdpr_text
         is_form_available
