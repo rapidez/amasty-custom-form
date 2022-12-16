@@ -16,7 +16,7 @@ class AmastyCustomForm extends Model
     {
         static::addGlobalScope(new IsActiveScope('status'));
         static::addGlobalScope('for-current-store', function (Builder $builder) {
-            $builder->whereRaw('? IN (store_id)', [0])->orWhereRaw('? IN (store_id)', [config('rapidez.store')]);
+            $builder->whereRaw('find_in_set(?, store_id) <> 0', [0])->orWhereRaw('find_in_set(?, store_id) <> 0', [config('rapidez.store')]);
         });
     }
 }
