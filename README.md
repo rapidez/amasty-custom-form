@@ -11,11 +11,6 @@ Including the graphql module.
 composer require rapidez/amasty-custom-form
 ```
 
-Make sure this exists in your `app.js`:
-```js
-import.meta.glob(['Vendor/rapidez/*/resources/js/app.js'], { eager: true });
-```
-
 ### Showing a Form
 
 You can show a form by loading the amasty-custom-form form component:

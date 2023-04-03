@@ -1,1 +1,0 @@
-import './amasty-custom-form'
