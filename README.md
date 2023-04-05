@@ -7,15 +7,9 @@ Including the graphql module.
 
 ## Installation
 
-```
+```bash
 composer require rapidez/amasty-custom-form
 ```
-
-Then load the javascript in your app.js:\
-
-```javascript
-require('Vendor/rapidez/amasty-custom-form/resources/js/amasty-custom-form.js')
-````
 
 ### Showing a Form
 
@@ -41,7 +35,7 @@ $form = \Rapidez\AmastyCustomForm\Models\AmastyCustomForm::select('form_id')->wh
 
 If you need to change the views you can publish them with:
 
-```
+```bash
 php artisan vendor:publish --provider="Rapidez\AmastyCustomForm\AmastyCustomFormServiceProvider" --tag=views
 ```
 
