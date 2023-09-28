@@ -19,20 +19,67 @@ Vue.prototype.transformAmCustomFormResponse = async function (response) {
 
 Vue.prototype.amFormToVariables = function (form) {
     let variables = {form_data: {form_id: form.form_id}}
-    let replaceVariables = value => value
-        // Customer Variables
-        .replaceAll('{firstname}', window.app?.user?.firstname ?? '')
-        .replaceAll('{lastname}', window.app?.user?.lastname ?? '')
-        .replaceAll('{email}', window.app?.user?.email ?? '')
-        .replaceAll('{company}', window.app?.user?.addresses[0]?.company ?? '')
-        .replaceAll('{telephone}', window.app?.user?.addresses[0]?.telephone ?? '')
-        .replaceAll('{street}', window.app?.user?.addresses[0]?.street?.join(' ') ?? '')
-        .replaceAll('{city}', window.app?.user?.addresses[0]?.city ?? '')
-        .replaceAll('{region}', window.app?.user?.addresses[0]?.region?.region ?? '')
-        .replaceAll('{postcode}', window.app?.user?.addresses[0]?.postcode ?? '')
-        // General Variables
-        .replaceAll('{url}', window.location.href)
-        .replaceAll('{product_url}', window.location.href);
+
+    let replaceVariables = (value) => {
+        let replaceVariable = (input) => {
+            switch(input) {
+                case '{product_url}':
+                case '{url}': return window.location.href
+
+                default:
+                    let parts = input.substring(1, input.length - 1).split('.')
+
+                    let pointer = window.app?.user
+                    if(!pointer) {
+                        return ''
+                    }
+
+                    // Iterate through the parts to navigate the user object
+                    for(const part of parts) {
+                        if(part.startsWith('custom:')) {
+                            pointer = pointer.custom_attributes?.find(attribute => attribute.attribute_code == part.substring(7)).value
+                        } else {
+                            switch(part) {
+                                case 'address':
+                                    pointer = pointer.addresses[0]
+                                    break
+                                case 'billing':
+                                case 'shipping':
+                                    let id = pointer['default_'+part]
+                                    pointer = pointer.addresses.find(address => address.id == id)
+                                    break
+                                case 'street':
+                                    pointer = pointer.street?.join(' ')
+                                    break
+
+                                default:
+                                    pointer = pointer[part]
+                                    break
+                            }
+                        }
+
+                        // Return empty string when not defined
+                        if(!pointer) {
+                            return ''
+                        }
+                    }
+                    return pointer;
+            }
+        }
+
+        // Get all {}-enclosed variables and replace them
+        let matches = value.matchAll('{[^\}]*}')
+        for(const match of matches) {
+            let input = match[0]
+            if(!input) {
+                continue
+            }
+
+            value = value.replaceAll(input, replaceVariable(input))
+        }
+
+        return value
+    }
 
     form.form_json.map(form => {
         form.map(field => {
