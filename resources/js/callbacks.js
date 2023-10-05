@@ -21,13 +21,33 @@ Vue.prototype.amFormToVariables = function (form) {
     let variables = {form_data: {form_id: form.form_id}}
 
     let replaceVariables = (value) => {
-        let replaceVariable = (input) => {
+        let navigate = (pointer, part) => {
+            if(part.startsWith('custom:')) {
+                return pointer.custom_attributes?.find(attribute => attribute.attribute_code === part.substring(7)).value
+            }
+            switch(part) {
+                case 'address':
+                    return pointer.addresses[0]
+                case 'billing':
+                case 'shipping':
+                    let id = pointer['default_'+part]
+                    return pointer.addresses.find(address => address.id == id)
+                case 'street':
+                    return pointer.street?.join(' ')
+
+                default:
+                    return pointer[part]
+            }
+        }
+
+        // Get all {}-enclosed variables and replace them
+        value = value.replaceAll(/(?<replace>{(?<variable>[^\}]*)})/g, (match, replace, input) => {
             switch(input) {
                 case '{product_url}':
                 case '{url}': return window.location.href
 
                 default:
-                    let parts = input.substring(1, input.length - 1).split('.')
+                    let parts = input.split('.')
 
                     let pointer = window.app?.user
                     if(!pointer) {
@@ -36,27 +56,7 @@ Vue.prototype.amFormToVariables = function (form) {
 
                     // Iterate through the parts to navigate the user object
                     for(const part of parts) {
-                        if(part.startsWith('custom:')) {
-                            pointer = pointer.custom_attributes?.find(attribute => attribute.attribute_code == part.substring(7)).value
-                        } else {
-                            switch(part) {
-                                case 'address':
-                                    pointer = pointer.addresses[0]
-                                    break
-                                case 'billing':
-                                case 'shipping':
-                                    let id = pointer['default_'+part]
-                                    pointer = pointer.addresses.find(address => address.id == id)
-                                    break
-                                case 'street':
-                                    pointer = pointer.street?.join(' ')
-                                    break
-
-                                default:
-                                    pointer = pointer[part]
-                                    break
-                            }
-                        }
+                        pointer = navigate(pointer, part)
 
                         // Return empty string when not defined
                         if(!pointer) {
@@ -65,18 +65,7 @@ Vue.prototype.amFormToVariables = function (form) {
                     }
                     return pointer;
             }
-        }
-
-        // Get all {}-enclosed variables and replace them
-        let matches = value.matchAll('{[^\}]*}')
-        for(const match of matches) {
-            let input = match[0]
-            if(!input) {
-                continue
-            }
-
-            value = value.replaceAll(input, replaceVariable(input))
-        }
+        })
 
         return value
     }
