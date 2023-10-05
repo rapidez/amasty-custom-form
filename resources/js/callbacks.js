@@ -56,6 +56,16 @@ Vue.prototype.amFormToVariables = function (form) {
         }
         return pointer;
     }
+
+    let getProductVariable = (name) => {
+        let product = window.config.product
+
+        if (name == 'final_price') {
+            return product.special_price || product.price
+        }
+
+        return product[name] ?? '';
+    }
     
     let replaceVariables = (value) => {
         // Get all {}-enclosed variables and replace them
@@ -64,7 +74,11 @@ Vue.prototype.amFormToVariables = function (form) {
                 case '{product_url}':
                 case '{url}': return window.location.href
 
-                default: return getUserVariable(input.split('.'))                    
+                default:
+                    if (input.startsWith('product_')) {
+                        return getProductVariable(input.substring(8))
+                    }
+                    return getUserVariable(input.split('.'))                    
             }
         })
 
