@@ -25,6 +25,10 @@ Vue.prototype.amFormToVariables = function (form) {
             return null
         }
 
+        if(!part) {
+            return pointer
+        }
+
         if(part.startsWith('custom:')) {
             return pointer.custom_attributes?.find(attribute => attribute.attribute_code === part.substring(7)).value
         }
@@ -37,42 +41,16 @@ Vue.prototype.amFormToVariables = function (form) {
                 return pointer.addresses?.find(address => address.id == id)
             case 'street':
                 return pointer.street?.join(' ')
+            case 'final_price':
+                return pointer.special_price || product.price
 
             default:
                 return pointer[part]
         }
     }
 
-    let getUserVariable = (parts) => {
-        let pointer = window.app?.user
-        if(!pointer) {
-            return ''
-        }
-
-        // Iterate through the parts to navigate the user object
-        for(const part of parts) {
-            let fallback = navigate(pointer?.addresses?.[0], part)
-            pointer = navigate(pointer, part)
-
-            // Return empty string when not defined
-            if(!pointer) {
-                if(fallback) {
-                    return fallback
-                }
-                return ''
-            }
-        }
-        return pointer
-    }
-
-    let getProductVariable = (name) => {
-        let product = window.config.product
-
-        if (name == 'final_price') {
-            return product.special_price || product.price
-        }
-
-        return product[name] ?? '';
+    let navigateThrough = (obj, input) => {
+        return input.split('.').reduce((pointer, part) => navigate(pointer, part) ?? navigate(pointer?.addresses?.[0], part), obj)
     }
 
     let replaceVariables = (value) => {
@@ -84,9 +62,9 @@ Vue.prototype.amFormToVariables = function (form) {
 
                 default:
                     if (input.startsWith('product_')) {
-                        return getProductVariable(input.substring(8))
+                        return navigateThrough(window.config?.product, input.substring(8))
                     }
-                    return getUserVariable(input.split('.'))
+                    return navigateThrough(window.app?.user, input)
             }
         })
 
