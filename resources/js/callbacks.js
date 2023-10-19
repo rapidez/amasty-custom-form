@@ -19,20 +19,57 @@ Vue.prototype.transformAmCustomFormResponse = async function (response) {
 
 Vue.prototype.amFormToVariables = function (form) {
     let variables = {form_data: {form_id: form.form_id}}
-    let replaceVariables = value => value
-        // Customer Variables
-        .replaceAll('{firstname}', window.app?.user?.firstname ?? '')
-        .replaceAll('{lastname}', window.app?.user?.lastname ?? '')
-        .replaceAll('{email}', window.app?.user?.email ?? '')
-        .replaceAll('{company}', window.app?.user?.addresses[0]?.company ?? '')
-        .replaceAll('{telephone}', window.app?.user?.addresses[0]?.telephone ?? '')
-        .replaceAll('{street}', window.app?.user?.addresses[0]?.street?.join(' ') ?? '')
-        .replaceAll('{city}', window.app?.user?.addresses[0]?.city ?? '')
-        .replaceAll('{region}', window.app?.user?.addresses[0]?.region?.region ?? '')
-        .replaceAll('{postcode}', window.app?.user?.addresses[0]?.postcode ?? '')
-        // General Variables
-        .replaceAll('{url}', window.location.href)
-        .replaceAll('{product_url}', window.location.href);
+
+    let navigate = (pointer, part) => {
+        if(!pointer) {
+            return null
+        }
+
+        if(!part) {
+            return pointer
+        }
+
+        if(part.startsWith('custom:')) {
+            return pointer.custom_attributes?.find(attribute => attribute.attribute_code === part.substring(7)).value
+        }
+        switch(part) {
+            case 'address':
+                return pointer.addresses?.[0]
+            case 'billing':
+            case 'shipping':
+                let id = pointer['default_'+part]
+                return pointer.addresses?.find(address => address.id == id)
+            case 'street':
+                return pointer.street?.join(' ')
+            case 'final_price':
+                return pointer.special_price || product.price
+
+            default:
+                return pointer[part]
+        }
+    }
+
+    let navigateThrough = (obj, input) => {
+        return input.split('.').reduce((pointer, part) => navigate(pointer, part) ?? navigate(pointer?.addresses?.[0], part), obj)
+    }
+
+    let replaceVariables = (value) => {
+        // Get all {}-enclosed variables and replace them
+        value = value.replaceAll(/(?<replace>{(?<variable>[^\}]*)})/g, (match, replace, input) => {
+            switch(input) {
+                case '{product_url}':
+                case '{url}': return window.location.href
+
+                default:
+                    if (input.startsWith('product_')) {
+                        return navigateThrough(window.config?.product, input.substring(8))
+                    }
+                    return navigateThrough(window.app?.user, input)
+            }
+        })
+
+        return value
+    }
 
     form.form_json.map(form => {
         form.map(field => {
