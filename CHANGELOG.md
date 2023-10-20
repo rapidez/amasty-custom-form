@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/amasty-custom-form/compare/0.3.0...master)
+[Unreleased changes](https://github.com/rapidez/amasty-custom-form/compare/0.3.1...master)
+## [0.3.1](https://github.com/rapidez/amasty-custom-form/releases/tag/0.3.1) - 2023-10-20
+
+### Fixed
+
+- Fall back to empty string (#6)
+
 ## [0.3.0](https://github.com/rapidez/amasty-custom-form/releases/tag/0.3.0) - 2023-10-19
 
 ### Added
