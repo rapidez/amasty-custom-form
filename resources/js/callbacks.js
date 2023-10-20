@@ -50,7 +50,7 @@ Vue.prototype.amFormToVariables = function (form) {
     }
 
     let navigateThrough = (obj, input) => {
-        return input.split('.').reduce((pointer, part) => navigate(pointer, part) ?? navigate(pointer?.addresses?.[0], part), obj)
+        return input.split('.').reduce((pointer, part) => navigate(pointer, part) ?? navigate(pointer?.addresses?.[0] ?? '', part), obj)
     }
 
     let replaceVariables = (value) => {
