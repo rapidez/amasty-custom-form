@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/amasty-custom-form/compare/0.3.1...master)
+[Unreleased changes](https://github.com/rapidez/amasty-custom-form/compare/1.0.0...master)
+## [1.0.0](https://github.com/rapidez/amasty-custom-form/releases/tag/1.0.0) - 2024-02-21
+
+### Added
+
+- Rapidez v2 compatibility (#7)
+
 ## [0.3.1](https://github.com/rapidez/amasty-custom-form/releases/tag/0.3.1) - 2023-10-20
 
 ### Fixed
