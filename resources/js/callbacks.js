@@ -1,8 +1,7 @@
 import 'Vendor/rapidez/core/resources/js/vue'
 
 Vue.prototype.transformAmCustomFormResponse = async function (data, response) {
-    let data
-    if(!(data = response.data.data.customform)) {
+    if (!(data = response.data.data.customform)) {
         return response.data.data
     }
 
