@@ -68,7 +68,7 @@ Vue.prototype.amFormToVariables = function (form) {
             }
         })
 
-        return value
+        return value.includes('null') ? '' : value
     }
 
     form.form_json.map(form => {
