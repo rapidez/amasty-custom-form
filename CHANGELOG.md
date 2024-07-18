@@ -1,6 +1,30 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/amasty-custom-form/compare/1.0.0...master)
+[Unreleased changes](https://github.com/rapidez/amasty-custom-form/compare/1.0.3...master)
+## [1.0.3](https://github.com/rapidez/amasty-custom-form/releases/tag/1.0.3) - 2024-07-18
+
+### Fixed
+
+- Don't break if custom attribute does not exist (#11)
+
+## [1.0.2](https://github.com/rapidez/amasty-custom-form/releases/tag/1.0.2) - 2024-07-15
+
+### Fixed
+
+- Fix data is already defined error (#10)
+
+## [1.0.1](https://github.com/rapidez/amasty-custom-form/releases/tag/1.0.1) - 2024-07-10
+
+### Fixed
+
+- Return empty string to prevent null (#9)
+
+## [0.3.2](https://github.com/rapidez/amasty-custom-form/releases/tag/0.3.2) - 2024-07-10
+
+### Fixed
+
+- Return empty string to prevent null (#8)
+
 ## [1.0.0](https://github.com/rapidez/amasty-custom-form/releases/tag/1.0.0) - 2024-02-21
 
 ### Added
