@@ -29,7 +29,7 @@ Vue.prototype.amFormToVariables = function (form) {
         }
 
         if(part.startsWith('custom:')) {
-            return pointer.custom_attributes?.find(attribute => attribute.attribute_code === part.substring(7)).value
+            return pointer.custom_attributes?.find(attribute => attribute.attribute_code === part.substring(7))?.value ?? ''
         }
         switch(part) {
             case 'address':
