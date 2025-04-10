@@ -3,8 +3,7 @@
     "description": "",
     "require":
     {
-        "laravel/framework": "*",
-        "rapidez/core": "^2.0"
+        "rapidez/core": "^2.0|^3.0"
     },
     "config":
     {
