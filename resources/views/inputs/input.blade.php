@@ -1,7 +1,7 @@
 <input
     v-if="['textinput', 'date', 'time', 'number'].includes(input.type)"
     v-bind:type="{'validate-email': 'email', 'validate-number': 'number', 'validate-digits': 'number', 'validate-url': 'url'}[input.validation] || input.type.replace('input', '')"
-    class="w-full py-2 px-3 border-gray-300 rounded focus:ring-green-500 focus:border-green-500 sm:text-sm"
+    class="w-full py-2 px-3 border-gray-300 rounded-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
     v-bind:id="input.name"
     v-bind:name="input.name"
     v-bind:required="input.required"
